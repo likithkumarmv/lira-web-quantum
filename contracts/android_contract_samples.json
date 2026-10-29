@@ -1,0 +1,27 @@
+{
+  "driver_task_response": {
+    "task_id": "TSK-001",
+    "status": "ASSIGNED",
+    "driver_id": "DRV-101",
+    "resource_id": "RES-CHASSIS-40-01",
+    "gate_id": "GATE-01",
+    "auth_challenge": "CHAL-4921",
+    "instruction": "Present TAG_07 at ESP32 Gate 01 display; wait for Dispatcher Web Confirmation"
+  },
+  "plan_latest_response": {
+    "plan_id": "PLAN-20261029-WAVE2",
+    "version": 2,
+    "status": "APPROVED",
+    "solver_backend": "QPIAI_OPT_LOCAL_FALLBACK",
+    "modeled_cost": 2450.0,
+    "tasks": [
+      {
+        "task_id": "TSK-001",
+        "job_id": "JOB-JNPA-401",
+        "resource_id": "RES-CHASSIS-40-01",
+        "driver_id": "DRV-101",
+        "status": "ASSIGNED"
+      }
+    ]
+  }
+}

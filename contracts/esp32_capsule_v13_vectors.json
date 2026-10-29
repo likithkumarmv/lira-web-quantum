@@ -1,0 +1,22 @@
+{
+  "test_vector_version": "v13.0",
+  "generated_for": "ESP32 DevKit V1 ILI9341 Firmware Validation",
+  "key": "lira-lab-device-key-change-me-32b",
+  "device_id": "EDGE-01",
+  "capsule_version": 13,
+  "plan_version": 2,
+  "expires_unix": 1730190900,
+  "expected_tag_ref": "15B2FE03",
+  "work_order_id": "WO-20261029-447",
+  "resource_id": "R-03",
+  "snapshot_hash": "sha256-bay04-q4-approved",
+  "solver_run_id": "QOPT-C5-8f2c",
+  "validator_status": "PASS",
+  "branches_canonical": "B,TRUCK_SUBSTITUTE,32A3FF03,T11,R-03,1730190600,g_planb_hi,1730188800",
+  "branches_digest": "fe704c958b3eea33f78fc306f00d57ba525af2eae093f7be1635910f7d5d46cb",
+  "tag_registry_canonical": "15B2FE03,EQUIPMENT_TAG,R-03\n1D46FB03,CONTAINER_TAG,ONEU5519206\n32A3FF03,TRUCK_CARD,T11\n7226DA05,EQUIPMENT_TAG,R-07\nF7B5FB03,TRUCK_CARD,T09",
+  "tag_registry_digest": "811f95ab3da51891cd55975d8f94f2e650f4db132fbbaee839ec103220ffea77",
+  "signed_string": "EDGE-01|13|2|1730190900|15B2FE03|WO-20261029-447|R-03|sha256-bay04-q4-approved|QOPT-C5-8f2c|PASS|fe704c958b3eea33f78fc306f00d57ba525af2eae093f7be1635910f7d5d46cb|811f95ab3da51891cd55975d8f94f2e650f4db132fbbaee839ec103220ffea77",
+  "capsule_mac": "b567556c9f8f7913e51982752a85aa2453b7b63014e0ea78fd4045a824263d8e"
+}
+

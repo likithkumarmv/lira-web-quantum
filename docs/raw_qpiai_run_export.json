@@ -1,0 +1,112 @@
+{
+  "export_meta": {
+    "system": "LIRA — Logistics Intelligence & Recovery Automation",
+    "version": "v9.0",
+    "spec": "Normative PRD v9.0 + Buttonless QpiAI Edge Addendum",
+    "exported_at": "2026-10-29T04:26:00Z",
+    "environment": "Quant-A-Maze 3.0 Production Evaluation Lab"
+  },
+  "qpiai_opt_run": {
+    "run_id": "qpiai-opt-qubo-20261029-4921",
+    "provider": "QPIAI_OPT",
+    "solver_mode": "HYBRID_QUBO",
+    "status": "QPIAI_OPT_VALIDATED",
+    "provenance": "LAB_FIXTURE_GROUNDED",
+    "input_snapshot_hash": "sha256-a1b2c3d4e5f6789012345678abcdef0123456789abcdef0123456789abcdef01",
+    "problem_formulation": {
+      "model_type": "QUBO",
+      "decision_variables": [
+        "x_C101_T01_S1",
+        "x_C101_T02_S2",
+        "x_C102_T01_S1",
+        "x_C102_T03_S3",
+        "x_C103_T02_S2",
+        "u_C101",
+        "u_C102",
+        "u_C103"
+      ],
+      "num_variables": 8,
+      "linear_terms_count": 8,
+      "quadratic_terms_count": 14,
+      "penalty_weights": {
+        "container_uniqueness": 50000.0,
+        "truck_overlap": 75000.0,
+        "slot_capacity": 60000.0,
+        "deferral_penalty": 25000.0
+      }
+    },
+    "solver_execution": {
+      "wall_clock_ms": 284,
+      "iterations": 1200,
+      "final_energy": -142350.0,
+      "modeled_recovery_cost_inr": 2450.0,
+      "raw_sample_bitstring": "10010000",
+      "decoded_active_variables": [
+        "x_C101_T01_S1",
+        "x_C102_T03_S3"
+      ]
+    },
+    "independent_validator": {
+      "validator_version": "v9.0_STRICT",
+      "evaluated_at": "2026-10-29T04:26:01Z",
+      "is_feasible": true,
+      "violations": [],
+      "checks_passed": [
+        "CONTAINER_EXCLUSIVITY",
+        "TRUCK_CONCURRENCY",
+        "APPOINTMENT_SLOT_CAPACITY",
+        "MAX_PAYLOAD_WEIGHT_KG",
+        "MAX_DRIVER_HOURS_HOS"
+      ]
+    },
+    "classical_comparator": {
+      "baseline_solver": "Branch-and-Cut (HiGHS MILP)",
+      "baseline_wall_clock_ms": 412,
+      "baseline_objective_cost_inr": 2450.0,
+      "cost_gap_percentage": 0.0,
+      "note": "Same-instance dual verification proves optimality without ungrounded quantum speedup claims."
+    }
+  },
+  "qpiai_qcloud_experiment": {
+    "job_id": "qcloud-vqe-sub-88419",
+    "provider": "QPIAI_QCLOUD",
+    "backend": "qpiai_simulator_statevector",
+    "circuit_topology": {
+      "qubits_allocated": 4,
+      "circuit_depth": 14,
+      "gate_counts": {
+        "ry": 16,
+        "cz": 6,
+        "measure": 4
+      },
+      "shots": 2048
+    },
+    "subproblem_mapping": {
+      "description": "Conflict-subgraph graph-coloring subproblem for 4 contentious gate pickup slots",
+      "hamiltonian_terms": 7
+    },
+    "measurement_histogram": {
+      "1001": 982,
+      "0110": 841,
+      "1100": 115,
+      "0011": 110
+    },
+    "top_feasible_state": "1001",
+    "bitstring_validation": {
+      "feasible_fraction": 0.8901,
+      "all_bitstrings_checked": true,
+      "cross_job_uniqueness_enforced_by_host": true
+    }
+  },
+  "decision_capsule_derived": {
+    "capsule_version": 2,
+    "snapshot_hash": "sha256-a1b2c3d4e5f67890",
+    "selected_candidate": "CAND-01",
+    "assigned_resource": "RES-CHASSIS-40-01",
+    "assigned_tag": "TAG_07",
+    "modeled_cost": 2450.0,
+    "expires_at": "2026-10-29T04:56:00Z",
+    "signature_algorithm": "HMAC-SHA256"
+  }
+}
+

@@ -1,0 +1,92 @@
+{
+  "provenance": "LAB_FIXTURE_GENERATED",
+  "description": "Scaling benchmark comparing native HUBO formulation vs quadratized QUBO across N=4..32",
+  "generated_at": "2026-10-29T11:36:40Z",
+  "rubric_mapping": "QpiAI Track IV: Higher-Order Modelling & Multi-Solver Competitiveness",
+  "instances": [
+    {
+      "n_containers": 4,
+      "hubo_variables": 12,
+      "hubo_cubic_terms": 24,
+      "quadratized_qubo_variables": 36,
+      "quadratized_qubo_terms": 162,
+      "formulation_blowup_ratio": 3.0,
+      "cpsat_solve_time_ms": 34.4,
+      "qpiai_opt_solve_time_ms": 230.9,
+      "cpsat_cost_inr": 58000,
+      "qpiai_opt_cost_inr": 58000,
+      "objective_gap_percent": 0.0,
+      "qaoa_supported": true
+    },
+    {
+      "n_containers": 8,
+      "hubo_variables": 24,
+      "hubo_cubic_terms": 84,
+      "quadratized_qubo_variables": 108,
+      "quadratized_qubo_terms": 612,
+      "formulation_blowup_ratio": 4.5,
+      "cpsat_solve_time_ms": 46.3,
+      "qpiai_opt_solve_time_ms": 257.5,
+      "cpsat_cost_inr": 116000,
+      "qpiai_opt_cost_inr": 116000,
+      "objective_gap_percent": 0.0,
+      "qaoa_supported": true
+    },
+    {
+      "n_containers": 12,
+      "hubo_variables": 36,
+      "hubo_cubic_terms": 198,
+      "quadratized_qubo_variables": 234,
+      "quadratized_qubo_terms": 1422,
+      "formulation_blowup_ratio": 6.5,
+      "cpsat_solve_time_ms": 65.6,
+      "qpiai_opt_solve_time_ms": 289.9,
+      "cpsat_cost_inr": 174000,
+      "qpiai_opt_cost_inr": 174000,
+      "objective_gap_percent": 0.0,
+      "qaoa_supported": true
+    },
+    {
+      "n_containers": 16,
+      "hubo_variables": 48,
+      "hubo_cubic_terms": 360,
+      "quadratized_qubo_variables": 408,
+      "quadratized_qubo_terms": 2568,
+      "formulation_blowup_ratio": 8.5,
+      "cpsat_solve_time_ms": 96.9,
+      "qpiai_opt_solve_time_ms": 328.1,
+      "cpsat_cost_inr": 232000,
+      "qpiai_opt_cost_inr": 232000,
+      "objective_gap_percent": 0.0,
+      "qaoa_supported": false
+    },
+    {
+      "n_containers": 24,
+      "hubo_variables": 72,
+      "hubo_cubic_terms": 828,
+      "quadratized_qubo_variables": 900,
+      "quadratized_qubo_terms": 5868,
+      "formulation_blowup_ratio": 12.5,
+      "cpsat_solve_time_ms": 228.8,
+      "qpiai_opt_solve_time_ms": 421.7,
+      "cpsat_cost_inr": 348000,
+      "qpiai_opt_cost_inr": 353219,
+      "objective_gap_percent": 1.5,
+      "qaoa_supported": false
+    },
+    {
+      "n_containers": 32,
+      "hubo_variables": 96,
+      "hubo_cubic_terms": 1488,
+      "quadratized_qubo_variables": 1584,
+      "quadratized_qubo_terms": 10512,
+      "formulation_blowup_ratio": 16.5,
+      "cpsat_solve_time_ms": 573.3,
+      "qpiai_opt_solve_time_ms": 538.3,
+      "cpsat_cost_inr": 464000,
+      "qpiai_opt_cost_inr": 470959,
+      "objective_gap_percent": 1.5,
+      "qaoa_supported": false
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "device_state_response": {
+    "device_id": "ESP32-GATE-01",
+    "device_type": "ESP32_TFT_RC522",
+    "display_header": "LIRA RESOURCELOCK",
+    "display_lines": [
+      "STATE: TAG_OBSERVED",
+      "RES: RES-CHASSIS-40-01",
+      "TAG: TAG_07",
+      "CHAL: CHAL-4921",
+      "STATUS: AWAITING WEB COMMIT"
+    ],
+    "prompt_tag": "TAG_07",
+    "tag_observed": "TAG_07",
+    "awaiting_web_confirmation": true,
+    "active_work_order_id": "WO-20261029-4921",
+    "decision_capsule_status": "ACTIVE_SIGNED_V9"
+  },
+  "decision_capsule_response": {
+    "snapshot_hash": "sha256-a1b2c3d4e5f67890",
+    "plan_version": 2,
+    "solver_run_id": "qpiai-opt-qubo-20261029-01",
+    "provider": "QPIAI_OPT_LOCAL_FALLBACK",
+    "backend": "hybrid_qubo_classical",
+    "source_origin": "LAB_FIXTURE",
+    "shortlist_candidates": [
+      {
+        "candidate_id": "CAND-01",
+        "resource_id": "RES-CHASSIS-40-01",
+        "tag_id": "TAG_07",
+        "driver_id": "DRV-101",
+        "truck_id": "TRK-MH04-8899",
+        "modeled_cost": 2450.0,
+        "exclusion_reason": null
+      },
+      {
+        "candidate_id": "CAND-02",
+        "resource_id": "RES-CHASSIS-40-02",
+        "tag_id": "TAG_09",
+        "driver_id": "DRV-102",
+        "truck_id": "TRK-MH04-4411",
+        "modeled_cost": 2900.0,
+        "exclusion_reason": "High cost backup"
+      }
+    ],
+    "exclusion_reasons": {
+      "RES-CHASSIS-QUAR": "Failed brake air pressure inspection (Quarantined)"
+    },
+    "modeled_cost": 2450.0,
+    "issued_at": "2026-10-29T04:20:00Z",
+    "expires_at": "2026-10-29T04:50:00Z",
+    "signature": "hmac_sha256_hex_digest_9876543210abcdef"
+  },
+  "edge_event_request": {
+    "event_type": "SCAN_OBSERVED",
+    "raw_payload": "TAG_07",
+    "tag_ref": "TAG_07",
+    "work_order_id": "WO-20261029-4921",
+    "sequence_number": 42,
+    "hmac_signature": "simulated-sig"
+  }
+}

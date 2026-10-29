@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* LIRA-Q SENTINEL — Industrial Port Operations Command Console */
+:root {
+  --background: #F3F6FA;
+  --foreground: #102235;
+  --surface: #FFFFFF;
+  --card: #FFFFFF;
+  --card-subtle: #EDF3F8;
+  --card-hover: #E3EBF2;
+  --secondary: #516678;
+  --muted: #516678;
+  --border: #D9E3EB;
+  --accent: #067A9B;
+  --status-amber: #B45309;
+  --status-red: #B91C1C;
+  --status-green: #15803D;
+  --status-blue: #067A9B;
+}
+
+.dark {
+  --background: #0B1420;
+  --foreground: #EAF3F8;
+  --surface: #111F2E;
+  --card: #111F2E;
+  --card-subtle: #0E1A27;
+  --card-hover: #172B3D;
+  --secondary: #9FB5C5;
+  --muted: #9FB5C5;
+  --border: #294355;
+  --accent: #39C9DF;
+  --status-amber: #F59E0B;
+  --status-red: #EF4444;
+  --status-green: #22C55E;
+  --status-blue: #39C9DF;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, monospace, sans-serif;
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+/* Strict Monospace Data Density */
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+/* Custom Industrial scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* ILI9341 320x240 TFT Display Enclosure (Buttonless Hardware) */
+.tft-chassis {
+  background: #050709;
+  border: 4px solid var(--border);
+  border-radius: 4px;
+}
+
+.tft-screen {
+  width: 320px;
+  height: 240px;
+  background: #000000;
+  border: 1px solid var(--border);
+  font-family: "Courier New", Courier, ui-monospace, monospace;
+}
+
+/* Flat Industrial Matte Badges */
+.badge-t1 {
+  background: rgba(21, 128, 61, 0.12);
+  color: var(--status-green);
+  border: 1px solid var(--status-green);
+}
+
+.badge-warning {
+  background: rgba(180, 83, 9, 0.12);
+  color: var(--status-amber);
+  border: 1px solid var(--status-amber);
+}
+
+.badge-blocker {
+  background: rgba(185, 28, 28, 0.12);
+  color: var(--status-red);
+  border: 1px solid var(--status-red);
+}
+
+.badge-steel {
+  background: rgba(6, 122, 155, 0.12);
+  color: var(--accent);
+  border: 1px solid var(--border);
+}

@@ -1,0 +1,3929 @@
+openapi: 3.1.0
+info:
+  title: LIRA Central Backend API
+  description: Logistics Intelligence & Recovery Automation - Central Server for Web
+    Manager, Android Driver App, and ESP32 Edge Device
+  version: v7.0
+paths:
+  /api/v1/health:
+    get:
+      tags:
+      - Auth & Health
+      summary: Health Check
+      operationId: health_check_api_v1_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /api/v1/auth/demo-login:
+    post:
+      tags:
+      - Auth & Health
+      summary: Demo Login
+      operationId: demo_login_api_v1_auth_demo_login_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DemoLoginRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemoLoginResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/driver/assignments:
+    get:
+      tags:
+      - Driver Mobile Contract
+      summary: Get Driver Assignments
+      operationId: get_driver_assignments_api_v1_driver_assignments_get
+      parameters:
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverAssignmentsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/driver/assignments/{assignment_id}/ack:
+    post:
+      tags:
+      - Driver Mobile Contract
+      summary: Ack Assignment
+      operationId: ack_assignment_api_v1_driver_assignments__assignment_id__ack_post
+      parameters:
+      - name: assignment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Assignment Id
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Idempotency-Key
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverAckRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverAckResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/driver/eta:
+    post:
+      tags:
+      - Driver Mobile Contract
+      summary: Update Driver Eta
+      operationId: update_driver_eta_api_v1_driver_eta_post
+      parameters:
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverEtaRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverEtaResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/driver/disruptions:
+    get:
+      tags:
+      - Driver Mobile Contract
+      summary: Get Driver Disruptions
+      operationId: get_driver_disruptions_api_v1_driver_disruptions_get
+      parameters:
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverDisruptionsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/driver/events:
+    get:
+      tags:
+      - Driver Mobile Contract
+      summary: Get Driver Events
+      operationId: get_driver_events_api_v1_driver_events_get
+      parameters:
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Sequence offset
+          default: 0
+          title: After
+        description: Sequence offset
+      - name: authorization
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverEventsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/driver/checkpoint-status:
+    get:
+      tags:
+      - Driver Mobile Contract
+      summary: Get Checkpoint Status
+      operationId: get_checkpoint_status_api_v1_driver_checkpoint_status_get
+      parameters:
+      - name: assignment_id
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Assignment ID
+          title: Assignment Id
+        description: Assignment ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckpointStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/ingest/document:
+    post:
+      tags:
+      - Document & Evidence Ingest
+      summary: Ingest Document
+      operationId: ingest_document_api_v1_ingest_document_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentIngestResponse'
+  /api/v1/ingest/jobs/{job_id}:
+    get:
+      tags:
+      - Document & Evidence Ingest
+      summary: Get Ingest Job
+      operationId: get_ingest_job_api_v1_ingest_jobs__job_id__get
+      parameters:
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IngestJobResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/incidents/overview/metrics:
+    get:
+      tags:
+      - Incidents & Blocker Graph
+      summary: Get Overview Metrics
+      operationId: get_overview_metrics_api_v1_incidents_overview_metrics_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/incidents:
+    get:
+      tags:
+      - Incidents & Blocker Graph
+      summary: List Incidents
+      operationId: list_incidents_api_v1_incidents_get
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      - name: severity
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Severity
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IncidentItem'
+                title: Response List Incidents Api V1 Incidents Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/incidents/{incident_id}:
+    get:
+      tags:
+      - Incidents & Blocker Graph
+      summary: Get Incident Detail
+      operationId: get_incident_detail_api_v1_incidents__incident_id__get
+      parameters:
+      - name: incident_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Incident Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncidentDetailResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/incidents/{incident_id}/verify:
+    post:
+      tags:
+      - Incidents & Blocker Graph
+      summary: Verify Incident Blocker
+      operationId: verify_incident_blocker_api_v1_incidents__incident_id__verify_post
+      parameters:
+      - name: incident_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Incident Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/incidents/{incident_id}/solve:
+    post:
+      tags:
+      - Incidents & Blocker Graph
+      summary: Trigger Solve
+      operationId: trigger_solve_api_v1_incidents__incident_id__solve_post
+      parameters:
+      - name: incident_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Incident Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerSolveRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TriggerSolveResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recoveries/{recovery_id}/alternatives:
+    get:
+      tags:
+      - Recovery Studio & Approval
+      summary: Get Recovery Alternatives
+      operationId: get_recovery_alternatives_api_v1_recoveries__recovery_id__alternatives_get
+      parameters:
+      - name: recovery_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Recovery Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecoveryAlternativesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recoveries/{recovery_id}/approve:
+    post:
+      tags:
+      - Recovery Studio & Approval
+      summary: Approve Recovery Plan
+      operationId: approve_recovery_plan_api_v1_recoveries__recovery_id__approve_post
+      parameters:
+      - name: recovery_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Recovery Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovePlanRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovePlanResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/qpiai/runs/{run_id}:
+    get:
+      tags:
+      - QpiAI Solver Telemetry
+      summary: Get Qpiai Run
+      operationId: get_qpiai_run_api_v1_qpiai_runs__run_id__get
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Run Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolverRunResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/qpiai/jobs/{run_id}:
+    get:
+      tags:
+      - QpiAI Solver Telemetry
+      summary: Get Qpiai Job
+      description: Normative PRD v7.0 QpiAI job telemetry endpoint
+      operationId: get_qpiai_job_api_v1_qpiai_jobs__run_id__get
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Run Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolverRunResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/qpiai/hubo/formulation:
+    get:
+      tags:
+      - QpiAI Solver Telemetry
+      summary: Get Hubo Formulation
+      description: 'Exposes the full native 3rd-order HUBO polynomial, cubic tensor
+        terms,
+
+        quadratic matrix, and linear vector for the /opt-lab workbench.'
+      operationId: get_hubo_formulation_api_v1_qpiai_hubo_formulation_get
+      parameters:
+      - name: incident_id
+        in: query
+        required: false
+        schema:
+          type: string
+          default: INC-C102
+          title: Incident Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HUBOFormulationResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/qpiai/solve:
+    post:
+      tags:
+      - QpiAI Solver Telemetry
+      summary: Trigger Qpiai Solve
+      description: Trigger QpiAI QCloud QAOA and Opt solve on an incident
+      operationId: trigger_qpiai_solve_api_v1_qpiai_solve_post
+      parameters:
+      - name: incident_id
+        in: query
+        required: false
+        schema:
+          type: string
+          default: INC-C102
+          title: Incident Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerSolveRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TriggerSolveResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/qpiai/decision-modes:
+    get:
+      tags:
+      - QpiAI Solver Telemetry
+      summary: Get Decision Modes
+      description: Returns the unified 6-mode QpiAI decision matrix summary for Solver
+        Lab.
+      operationId: get_decision_modes_api_v1_qpiai_decision_modes_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/qpiai/modes/q4-exchange:
+    get:
+      tags:
+      - QpiAI Solver Telemetry
+      summary: Execute Q4 Exchange
+      description: 'Q4: Multi-Container Recovery Exchange.'
+      operationId: execute_q4_exchange_api_v1_qpiai_modes_q4_exchange_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    post:
+      tags:
+      - QpiAI Solver Telemetry
+      summary: Execute Q4 Exchange
+      description: 'Q4: Multi-Container Recovery Exchange.'
+      operationId: execute_q4_exchange_api_v1_qpiai_modes_q4_exchange_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/qpiai/modes/q5-horizon:
+    post:
+      tags:
+      - QpiAI Solver Telemetry
+      summary: Execute Q5 Horizon
+      description: 'Q5: Future-Proofing / Rolling Horizon.'
+      operationId: execute_q5_horizon_api_v1_qpiai_modes_q5_horizon_post
+      parameters:
+      - name: horizon_hours
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 48
+          title: Horizon Hours
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - QpiAI Solver Telemetry
+      summary: Execute Q5 Horizon
+      description: 'Q5: Future-Proofing / Rolling Horizon.'
+      operationId: execute_q5_horizon_api_v1_qpiai_modes_q5_horizon_get
+      parameters:
+      - name: horizon_hours
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 48
+          title: Horizon Hours
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/qpiai/modes/q6-qcloud:
+    get:
+      tags:
+      - QpiAI Solver Telemetry
+      summary: Execute Q6 Qcloud
+      description: 'Q6: QCloud Reality Experiment.'
+      operationId: execute_q6_qcloud_api_v1_qpiai_modes_q6_qcloud_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    post:
+      tags:
+      - QpiAI Solver Telemetry
+      summary: Execute Q6 Qcloud
+      description: 'Q6: QCloud Reality Experiment.'
+      operationId: execute_q6_qcloud_api_v1_qpiai_modes_q6_qcloud_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/external/events:
+    get:
+      tags:
+      - External Disruptions
+      summary: List External Events
+      operationId: list_external_events_api_v1_external_events_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ExternalEventItem'
+                type: array
+                title: Response List External Events Api V1 External Events Get
+  /api/v1/external/events/simulate:
+    post:
+      tags:
+      - External Disruptions
+      summary: Simulate External Event
+      operationId: simulate_external_event_api_v1_external_events_simulate_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulateExternalEventRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulateExternalEventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/calls/health:
+    get:
+      tags:
+      - AI Voice Calling
+      summary: Get Calling Health
+      description: Returns real Bolna agent connectivity and configuration health.
+      operationId: get_calling_health_api_v1_calls_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/calls/history:
+    get:
+      tags:
+      - AI Voice Calling
+      summary: List Calls History
+      operationId: list_calls_history_api_v1_calls_history_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/calls/start:
+    post:
+      tags:
+      - AI Voice Calling
+      summary: Start Voice Call
+      operationId: start_voice_call_api_v1_calls_start_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: true
+              type: object
+              title: Payload
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/integrations/bolna/webhook:
+    post:
+      tags:
+      - AI Voice Calling
+      summary: Bolna Webhook
+      description: 'Webhook callback from Bolna AI platform upon call completion /
+        transcript generation.
+
+        Authenticates webhook, updates call record, and dispatches replan check if
+        material update.'
+      operationId: bolna_webhook_api_v1_integrations_bolna_webhook_post
+      parameters:
+      - name: X-Bolna-Signature
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Bolna-Signature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              title: Payload
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/edge/{device_id}/decision-capsule:
+    get:
+      tags:
+      - ESP32 Hardware & TFT Edge
+      summary: Get Edge Decision Capsule
+      description: 'Returns the small, signed, versioned, expiring QpiAI Edge Decision
+        Capsule.
+
+        The ESP32 checks/applies this precomputed policy to PREVIEW alternatives and
+        show warnings,
+
+        NEVER approving dispatch or bypassing server-side authorization.'
+      operationId: get_edge_decision_capsule_api_v1_edge__device_id__decision_capsule_get
+      parameters:
+      - name: device_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Device Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DecisionCapsuleResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/edge/events:
+    post:
+      tags:
+      - ESP32 Hardware & TFT Edge
+      summary: Intake Edge Event
+      operationId: intake_edge_event_api_v1_edge_events_post
+      parameters:
+      - name: is_demo
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Set True for manager simulator bypass
+          default: false
+          title: Is Demo
+        description: Set True for manager simulator bypass
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdgeEventRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdgeEventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/edge/assignment:
+    get:
+      tags:
+      - ESP32 Hardware & TFT Edge
+      summary: Get Edge Assignment Alias
+      description: Zero-friction alias for ESP32 and Android client hot-spot discovery
+      operationId: get_edge_assignment_alias_api_v1_edge_assignment_get
+      parameters:
+      - name: device_id
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Device ID
+          default: LIRA-EDGE-01
+          title: Device Id
+        description: Device ID
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdgeTFTStateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/edge/{device_id}/state:
+    get:
+      tags:
+      - ESP32 Hardware & TFT Edge
+      summary: Get Edge Tft State
+      operationId: get_edge_tft_state_api_v1_edge__device_id__state_get
+      parameters:
+      - name: device_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Device Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdgeTFTStateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/edge/{device_id}/events:
+    get:
+      tags:
+      - ESP32 Hardware & TFT Edge
+      summary: Get Edge Events
+      operationId: get_edge_events_api_v1_edge__device_id__events_get
+      parameters:
+      - name: device_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Device Id
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 0
+          title: After
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/edge/simulate-mismatch:
+    post:
+      tags:
+      - ESP32 Hardware & TFT Edge
+      summary: Simulate Edge Mismatch
+      description: "Simulates an accidental wrong RFID tag scan without wasting solver\
+        \ (Anti-False-Escalation \xA716)"
+      operationId: simulate_edge_mismatch_api_v1_edge_simulate_mismatch_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdgeSimulationRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdgeEventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/edge/simulate-noshow:
+    post:
+      tags:
+      - ESP32 Hardware & TFT Edge
+      summary: Simulate Edge Noshow
+      description: Simulates an operator [REPORT EXCEPTION] touch or persistent no-show,
+        triggering Wave 2 replanning
+      operationId: simulate_edge_noshow_api_v1_edge_simulate_noshow_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdgeSimulationRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdgeEventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/edge/simulate-confirm:
+    post:
+      tags:
+      - ESP32 Hardware & TFT Edge
+      summary: Simulate Edge Confirm
+      description: Simulates operator [CONFIRM & BURN EEPROM] touch, verifying physical
+        staging and burning ratchet
+      operationId: simulate_edge_confirm_api_v1_edge_simulate_confirm_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdgeSimulationRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdgeEventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/edge/simulate-cloned-tag:
+    post:
+      tags:
+      - ESP32 Hardware & TFT Edge
+      summary: Simulate Edge Cloned Tag
+      description: Simulates an attacker presenting a cloned card with stale ratchet
+        counter (85 < 100), triggering immediate rejection
+      operationId: simulate_edge_cloned_tag_api_v1_edge_simulate_cloned_tag_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EdgeSimulationRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdgeEventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/edge/simulate-statutory-immunity:
+    post:
+      tags:
+      - ESP32 Hardware & TFT Edge
+      summary: Simulate Statutory Demurrage Immunity
+      description: "Simulates terminal RTG crane dig-out delay triggering 46 CFR \xA7\
+        \ 541.6 Demurrage Immunity Dossier (0% Importer Fault)"
+      operationId: simulate_statutory_demurrage_immunity_api_v1_edge_simulate_statutory_immunity_post
+      parameters:
+      - name: container_id
+        in: query
+        required: false
+        schema:
+          type: string
+          default: C102
+          title: Container Id
+      - name: disruption_reason
+        in: query
+        required: false
+        schema:
+          type: string
+          default: YARD_STACK_DEPTH_DELAY
+          title: Disruption Reason
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/evaluation/metrics:
+    get:
+      tags:
+      - Evaluation & Replay
+      summary: Get Evaluation Metrics
+      operationId: get_evaluation_metrics_api_v1_evaluation_metrics_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/replay/results:
+    get:
+      tags:
+      - Evaluation & Replay
+      summary: Get Replay Results
+      operationId: get_replay_results_api_v1_replay_results_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/audit/events:
+    get:
+      tags:
+      - Audit & Timeline
+      summary: List Audit Events
+      operationId: list_audit_events_api_v1_audit_events_get
+      parameters:
+      - name: correlation_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Correlation Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 50
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/verification/tasks:
+    get:
+      tags:
+      - Active Fact Acquisition & Verification
+      summary: List Verification Tasks
+      operationId: list_verification_tasks_api_v1_verification_tasks_get
+      parameters:
+      - name: incident_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Incident Id
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Active Fact Acquisition & Verification
+      summary: Create Verification Task
+      operationId: create_verification_task_api_v1_verification_tasks_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationTaskCreate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/verification/tasks/{task_id}/resolve:
+    post:
+      tags:
+      - Active Fact Acquisition & Verification
+      summary: Resolve Verification Task
+      operationId: resolve_verification_task_api_v1_verification_tasks__task_id__resolve_post
+      parameters:
+      - name: task_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Task Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerificationTaskResolve'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/resources:
+    get:
+      tags:
+      - ResourceLock Operations (v9 Buttonless)
+      summary: List Resources
+      operationId: list_resources_api_v1_resources_get
+      parameters:
+      - name: resource_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resource Type
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourceResponse'
+                title: Response List Resources Api V1 Resources Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/resources/{resource_id}:
+    get:
+      tags:
+      - ResourceLock Operations (v9 Buttonless)
+      summary: Get Resource
+      operationId: get_resource_api_v1_resources__resource_id__get
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/resources/{resource_id}/release:
+    post:
+      tags:
+      - ResourceLock Operations (v9 Buttonless)
+      summary: Release Resource
+      description: Returns or releases a resource, returning it to INSPECTED_AVAILABLE
+      operationId: release_resource_api_v1_resources__resource_id__release_post
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Resource Id
+      - name: notes
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/resource-work-orders:
+    post:
+      tags:
+      - ResourceLock Operations (v9 Buttonless)
+      summary: Create Resource Work Order
+      description: 'Creates a new Resource Work Order with a short-lived authorization
+        challenge.
+
+        Automatically prompts tag presentation on the linked ESP32 TFT screen.'
+      operationId: create_resource_work_order_api_v1_resource_work_orders_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceWorkOrderCreateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceWorkOrderResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - ResourceLock Operations (v9 Buttonless)
+      summary: List Resource Work Orders
+      operationId: list_resource_work_orders_api_v1_resource_work_orders_get
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResourceWorkOrderResponse'
+                title: Response List Resource Work Orders Api V1 Resource Work Orders
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/resource-work-orders/{work_order_id}:
+    get:
+      tags:
+      - ResourceLock Operations (v9 Buttonless)
+      summary: Get Resource Work Order
+      operationId: get_resource_work_order_api_v1_resource_work_orders__work_order_id__get
+      parameters:
+      - name: work_order_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Work Order Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceWorkOrderResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/resource-work-orders/{work_order_id}/commit:
+    post:
+      tags:
+      - ResourceLock Operations (v9 Buttonless)
+      summary: Commit Resource Work Order
+      description: 'ATOMIC WEB COMMITMENT (Buttonless Architecture):
+
+        Authorized custodian presses CONFIRM CHECKOUT on the WEBSITE (not the TFT).
+
+        Backend verifies challenge, session, permissions, lease, current version atomically.'
+      operationId: commit_resource_work_order_api_v1_resource_work_orders__work_order_id__commit_post
+      parameters:
+      - name: work_order_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Work Order Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceWorkOrderCommitRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/resource-work-orders/{work_order_id}/inspect-quarantine:
+    post:
+      tags:
+      - ResourceLock Operations (v9 Buttonless)
+      summary: Quarantine Resource Action
+      description: 'Enters INSPECTION_FAILED: immediately quarantines resource and
+        cancels active work order.'
+      operationId: quarantine_resource_action_api_v1_resource_work_orders__work_order_id__inspect_quarantine_post
+      parameters:
+      - name: work_order_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Work Order Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResourceQuarantineRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/risks/summary:
+    get:
+      tags:
+      - Weather and Traffic Risk Engine
+      summary: Get Risk Summary
+      operationId: get_risk_summary_api_v1_risks_summary_get
+      parameters:
+      - name: corridor
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Monitored freight corridor
+          default: NH-348 Panvel-JNPA Expressway
+          title: Corridor
+        description: Monitored freight corridor
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Risk Summary Api V1 Risks Summary Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/risks/{incident_id}:
+    get:
+      tags:
+      - Weather and Traffic Risk Engine
+      summary: Get Incident Risk Profile
+      operationId: get_incident_risk_profile_api_v1_risks__incident_id__get
+      parameters:
+      - name: incident_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Incident Id
+      - name: departure_time
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: ISO departure time
+          title: Departure Time
+        description: ISO departure time
+      - name: permitted_deadline
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: ISO appointment deadline
+          title: Permitted Deadline
+        description: ISO appointment deadline
+      - name: corridor
+        in: query
+        required: false
+        schema:
+          type: string
+          default: NH-348 Panvel-JNPA Expressway
+          title: Corridor
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Incident Risk Profile Api V1 Risks  Incident Id  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/evidence/assistant/query:
+    post:
+      tags:
+      - Evidence-Grounded Document RAG
+      summary: Ask Evidence Assistant
+      operationId: ask_evidence_assistant_api_v1_evidence_assistant_query_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RAGQueryRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Ask Evidence Assistant Api V1 Evidence Assistant Query
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/evidence/assistant/chunks:
+    get:
+      tags:
+      - Evidence-Grounded Document RAG
+      summary: Get Authorized Chunks
+      operationId: get_authorized_chunks_api_v1_evidence_assistant_chunks_get
+      parameters:
+      - name: container_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Container Id
+      - name: tenant_id
+        in: query
+        required: false
+        schema:
+          type: string
+          default: TENANT_JNPA
+          title: Tenant Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/investigations/optimize:
+    post:
+      tags:
+      - QpiAI Investigation Director
+      summary: Optimize Investigation Tasks
+      operationId: optimize_investigation_tasks_api_v1_investigations_optimize_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvestigationOptimizeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Optimize Investigation Tasks Api V1 Investigations
+                  Optimize Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/investigations/actions:
+    get:
+      tags:
+      - QpiAI Investigation Director
+      summary: Get Candidate Actions
+      operationId: get_candidate_actions_api_v1_investigations_actions_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/investigations/{investigation_id}:
+    get:
+      tags:
+      - QpiAI Investigation Director
+      summary: Get Investigation Run
+      operationId: get_investigation_run_api_v1_investigations__investigation_id__get
+      parameters:
+      - name: investigation_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Investigation Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/robustness/scenarios:
+    get:
+      tags:
+      - QpiAI Robustness Sandbox
+      summary: Get Robustness Scenarios
+      operationId: get_robustness_scenarios_api_v1_robustness_scenarios_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Get Robustness Scenarios Api V1 Robustness Scenarios
+                  Get
+  /api/v1/robustness/evaluate:
+    post:
+      tags:
+      - QpiAI Robustness Sandbox
+      summary: Run Robustness Evaluation
+      operationId: run_robustness_evaluation_api_v1_robustness_evaluate_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Run Robustness Evaluation Api V1 Robustness Evaluate
+                  Post
+  /api/v1/cases:
+    get:
+      tags:
+      - Freight Exception Cases C1-C6
+      summary: List Cases
+      description: List all six canonical freight exception cases (C1-C6) with summary
+        cards.
+      operationId: list_cases_api_v1_cases_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/cases/{case_id}:
+    get:
+      tags:
+      - Freight Exception Cases C1-C6
+      summary: Get Case Detail
+      description: Get complete 6-step deep fixture for a specific case (C1-C6).
+      operationId: get_case_detail_api_v1_cases__case_id__get
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/cases/{case_id}/recalculate:
+    post:
+      tags:
+      - Freight Exception Cases C1-C6
+      summary: Recalculate Case
+      description: 'Deterministic recalculation of avoidable demurrage/detention costs
+
+        in LAB_FIXTURE mode with interactive slider adjustments.'
+      operationId: recalculate_case_api_v1_cases__case_id__recalculate_post
+      parameters:
+      - name: case_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Case Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecalculateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /:
+    get:
+      summary: Root
+      operationId: root__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    ApprovePlanRequest:
+      properties:
+        reason:
+          type: string
+          title: Reason
+        manager_role:
+          type: string
+          title: Manager Role
+          default: DISPATCHER
+      type: object
+      required:
+      - reason
+      title: ApprovePlanRequest
+    ApprovePlanResponse:
+      properties:
+        accepted:
+          type: boolean
+          title: Accepted
+        plan_id:
+          type: string
+          title: Plan Id
+        plan_code:
+          type: string
+          title: Plan Code
+        assignment_id:
+          type: string
+          title: Assignment Id
+        status:
+          type: string
+          title: Status
+        driver_notified:
+          type: boolean
+          title: Driver Notified
+        edge_notified:
+          type: boolean
+          title: Edge Notified
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - accepted
+      - plan_id
+      - plan_code
+      - assignment_id
+      - status
+      - driver_notified
+      - edge_notified
+      - message
+      title: ApprovePlanResponse
+    AssignmentItem:
+      properties:
+        assignment_id:
+          type: string
+          title: Assignment Id
+        plan_id:
+          type: string
+          title: Plan Id
+        container_id:
+          type: string
+          title: Container Id
+        truck_id:
+          type: string
+          title: Truck Id
+        slot_id:
+          type: string
+          title: Slot Id
+        slot_start:
+          type: string
+          title: Slot Start
+        slot_end:
+          type: string
+          title: Slot End
+        checkpoint_id:
+          type: string
+          title: Checkpoint Id
+        status:
+          type: string
+          title: Status
+        driver_ack_state:
+          type: string
+          title: Driver Ack State
+        physical_state:
+          type: string
+          title: Physical State
+        reason_code:
+          type: string
+          title: Reason Code
+        reason_text:
+          type: string
+          title: Reason Text
+        customs_release:
+          type: string
+          title: Customs Release
+        deadline:
+          type: string
+          title: Deadline
+        projected_avoidable_cost_inr:
+          type: integer
+          title: Projected Avoidable Cost Inr
+        evidence_ids:
+          items:
+            type: string
+          type: array
+          title: Evidence Ids
+        updated_at:
+          type: string
+          title: Updated At
+      type: object
+      required:
+      - assignment_id
+      - plan_id
+      - container_id
+      - truck_id
+      - slot_id
+      - slot_start
+      - slot_end
+      - checkpoint_id
+      - status
+      - driver_ack_state
+      - physical_state
+      - reason_code
+      - reason_text
+      - customs_release
+      - deadline
+      - projected_avoidable_cost_inr
+      - evidence_ids
+      - updated_at
+      title: AssignmentItem
+    BlockerNodeSchema:
+      properties:
+        node_id:
+          type: string
+          title: Node Id
+        incident_id:
+          type: string
+          title: Incident Id
+        container_id:
+          type: string
+          title: Container Id
+        code:
+          type: string
+          title: Code
+        claim:
+          type: string
+          title: Claim
+        quote:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Quote
+        start_char:
+          type: integer
+          title: Start Char
+          default: 0
+        end_char:
+          type: integer
+          title: End Char
+          default: 0
+        authority_tier:
+          type: string
+          title: Authority Tier
+          default: T2
+        status:
+          type: string
+          title: Status
+          default: NEEDS_VERIFICATION
+        responsible_role:
+          type: string
+          title: Responsible Role
+          default: CUSTOMS_BROKER
+        evidence_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Evidence Id
+      type: object
+      required:
+      - node_id
+      - incident_id
+      - container_id
+      - code
+      - claim
+      title: BlockerNodeSchema
+    CandidateBlocker:
+      properties:
+        type:
+          type: string
+          title: Type
+        claim:
+          type: string
+          title: Claim
+        source_id:
+          type: string
+          title: Source Id
+        quote:
+          type: string
+          title: Quote
+        start_char:
+          type: integer
+          title: Start Char
+        end_char:
+          type: integer
+          title: End Char
+        confidence:
+          type: number
+          title: Confidence
+        authority_tier:
+          type: string
+          title: Authority Tier
+        status:
+          type: string
+          title: Status
+        responsible_role:
+          type: string
+          title: Responsible Role
+      type: object
+      required:
+      - type
+      - claim
+      - source_id
+      - quote
+      - start_char
+      - end_char
+      - confidence
+      - authority_tier
+      - status
+      - responsible_role
+      title: CandidateBlocker
+    CheckpointStatusResponse:
+      properties:
+        assignment_id:
+          type: string
+          title: Assignment Id
+        device_id:
+          type: string
+          title: Device Id
+        state:
+          type: string
+          title: State
+        rfid_state:
+          type: string
+          title: Rfid State
+        bay_present:
+          type: boolean
+          title: Bay Present
+        last_event_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Event At
+      type: object
+      required:
+      - assignment_id
+      - device_id
+      - state
+      - rfid_state
+      - bay_present
+      title: CheckpointStatusResponse
+    DecisionCapsuleCandidate:
+      properties:
+        candidate_id:
+          type: string
+          title: Candidate Id
+        truck_id:
+          type: string
+          title: Truck Id
+        slot_id:
+          type: string
+          title: Slot Id
+        resource_id:
+          type: string
+          title: Resource Id
+        modeled_cost_inr:
+          type: integer
+          title: Modeled Cost Inr
+        predicates:
+          additionalProperties: true
+          type: object
+          title: Predicates
+        rank:
+          type: integer
+          title: Rank
+      type: object
+      required:
+      - candidate_id
+      - truck_id
+      - slot_id
+      - resource_id
+      - modeled_cost_inr
+      - rank
+      title: DecisionCapsuleCandidate
+    DecisionCapsuleResponse:
+      properties:
+        snapshot_hash:
+          type: string
+          title: Snapshot Hash
+        plan_version:
+          type: integer
+          title: Plan Version
+        solver_run_id:
+          type: string
+          title: Solver Run Id
+        provider:
+          type: string
+          title: Provider
+        source_origin:
+          type: string
+          title: Source Origin
+        capsule_status:
+          type: string
+          title: Capsule Status
+        shortlist_candidates:
+          items:
+            $ref: '#/components/schemas/DecisionCapsuleCandidate'
+          type: array
+          title: Shortlist Candidates
+        exclusion_reasons:
+          additionalProperties:
+            type: string
+          type: object
+          title: Exclusion Reasons
+        modeled_cost_baseline_inr:
+          type: integer
+          title: Modeled Cost Baseline Inr
+        modeled_cost_optimal_inr:
+          type: integer
+          title: Modeled Cost Optimal Inr
+        expires_at:
+          type: string
+          title: Expires At
+        validator_proof_hash:
+          type: string
+          title: Validator Proof Hash
+        signature:
+          type: string
+          title: Signature
+        created_at:
+          type: string
+          title: Created At
+      type: object
+      required:
+      - snapshot_hash
+      - plan_version
+      - solver_run_id
+      - provider
+      - source_origin
+      - capsule_status
+      - modeled_cost_baseline_inr
+      - modeled_cost_optimal_inr
+      - expires_at
+      - validator_proof_hash
+      - signature
+      - created_at
+      title: DecisionCapsuleResponse
+    DemoLoginRequest:
+      properties:
+        user_code:
+          type: string
+          title: User Code
+      type: object
+      required:
+      - user_code
+      title: DemoLoginRequest
+    DemoLoginResponse:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+        token_type:
+          type: string
+          title: Token Type
+          default: bearer
+        expires_in:
+          type: integer
+          title: Expires In
+          default: 3600
+        role:
+          type: string
+          title: Role
+        display_name:
+          type: string
+          title: Display Name
+        truck_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Truck Id
+      type: object
+      required:
+      - access_token
+      - role
+      - display_name
+      title: DemoLoginResponse
+    DependencyEdgeSchema:
+      properties:
+        edge_id:
+          type: string
+          title: Edge Id
+        incident_id:
+          type: string
+          title: Incident Id
+        source_node_id:
+          type: string
+          title: Source Node Id
+        target_node_id:
+          type: string
+          title: Target Node Id
+        relationship_type:
+          type: string
+          title: Relationship Type
+          default: BLOCKS
+      type: object
+      required:
+      - edge_id
+      - incident_id
+      - source_node_id
+      - target_node_id
+      title: DependencyEdgeSchema
+    DisruptionItem:
+      properties:
+        event_id:
+          type: string
+          title: Event Id
+        type:
+          type: string
+          title: Type
+        trust_state:
+          type: string
+          title: Trust State
+        severity:
+          type: string
+          title: Severity
+        title:
+          type: string
+          title: Title
+        source_label:
+          type: string
+          title: Source Label
+        affected_trucks:
+          items:
+            type: string
+          type: array
+          title: Affected Trucks
+        starts_at:
+          type: string
+          title: Starts At
+        ends_at:
+          type: string
+          title: Ends At
+        updated_at:
+          type: string
+          title: Updated At
+      type: object
+      required:
+      - event_id
+      - type
+      - trust_state
+      - severity
+      - title
+      - source_label
+      - affected_trucks
+      - starts_at
+      - ends_at
+      - updated_at
+      title: DisruptionItem
+    DocumentIngestResponse:
+      properties:
+        job_id:
+          type: string
+          title: Job Id
+        status:
+          type: string
+          title: Status
+        source_id:
+          type: string
+          title: Source Id
+        accepted_metadata:
+          additionalProperties: true
+          type: object
+          title: Accepted Metadata
+      type: object
+      required:
+      - job_id
+      - status
+      - source_id
+      - accepted_metadata
+      title: DocumentIngestResponse
+    DriverAckRequest:
+      properties:
+        action:
+          type: string
+          title: Action
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+      type: object
+      required:
+      - action
+      title: DriverAckRequest
+    DriverAckResponse:
+      properties:
+        accepted:
+          type: boolean
+          title: Accepted
+        assignment_id:
+          type: string
+          title: Assignment Id
+        driver_ack_state:
+          type: string
+          title: Driver Ack State
+        event_id:
+          type: string
+          title: Event Id
+      type: object
+      required:
+      - accepted
+      - assignment_id
+      - driver_ack_state
+      - event_id
+      title: DriverAckResponse
+    DriverAssignmentsResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/AssignmentItem'
+          type: array
+          title: Items
+        updated_at:
+          type: string
+          title: Updated At
+      type: object
+      required:
+      - items
+      - updated_at
+      title: DriverAssignmentsResponse
+    DriverDisruptionsResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/DisruptionItem'
+          type: array
+          title: Items
+      type: object
+      required:
+      - items
+      title: DriverDisruptionsResponse
+    DriverEtaRequest:
+      properties:
+        truck_id:
+          type: string
+          title: Truck Id
+        eta:
+          type: string
+          title: Eta
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+          default: TRAFFIC
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+          default: DRIVER_SELF_REPORT
+      type: object
+      required:
+      - truck_id
+      - eta
+      title: DriverEtaRequest
+    DriverEtaResponse:
+      properties:
+        accepted:
+          type: boolean
+          title: Accepted
+        event_id:
+          type: string
+          title: Event Id
+        recovery_status:
+          type: string
+          title: Recovery Status
+      type: object
+      required:
+      - accepted
+      - event_id
+      - recovery_status
+      title: DriverEtaResponse
+    DriverEventItem:
+      properties:
+        event_id:
+          type: string
+          title: Event Id
+        sequence:
+          type: integer
+          title: Sequence
+        type:
+          type: string
+          title: Type
+        assignment_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignment Id
+        created_at:
+          type: string
+          title: Created At
+        payload:
+          additionalProperties: true
+          type: object
+          title: Payload
+      type: object
+      required:
+      - event_id
+      - sequence
+      - type
+      - created_at
+      - payload
+      title: DriverEventItem
+    DriverEventsResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/DriverEventItem'
+          type: array
+          title: Items
+        next_sequence:
+          type: integer
+          title: Next Sequence
+      type: object
+      required:
+      - items
+      - next_sequence
+      title: DriverEventsResponse
+    EdgeEventRequest:
+      properties:
+        device_id:
+          type: string
+          title: Device Id
+        event_type:
+          type: string
+          title: Event Type
+        assignment_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignment Id
+        container_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Container Id
+        truck_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Truck Id
+        rfid_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Rfid Token
+        rfid_match:
+          type: boolean
+          title: Rfid Match
+          default: false
+        bay_present:
+          type: boolean
+          title: Bay Present
+          default: true
+        observed_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Observed At
+        sequence:
+          type: integer
+          title: Sequence
+          default: 1
+        device_seq:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Device Seq
+        nonce:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nonce
+        work_order_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Work Order Id
+        tag_ref:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tag Ref
+        operator_action:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Operator Action
+        exception_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exception Code
+        eeprom_sector4_dump:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Eeprom Sector4 Dump
+        rolling_ratchet_counter:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rolling Ratchet Counter
+        touch_signature_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Touch Signature Hash
+        mean_z_pressure:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Mean Z Pressure
+        qr_custody_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Qr Custody Token
+        edge_qaoa_bitstring_matched:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Edge Qaoa Bitstring Matched
+        signature:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Signature
+      type: object
+      required:
+      - device_id
+      - event_type
+      title: EdgeEventRequest
+    EdgeEventResponse:
+      properties:
+        accepted:
+          type: boolean
+          title: Accepted
+        event_id:
+          type: string
+          title: Event Id
+        verified:
+          type: boolean
+          title: Verified
+        action_triggered:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Action Triggered
+        checkpoint_state:
+          type: string
+          title: Checkpoint State
+          default: NORMAL
+        work_order_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Work Order Status
+        proof_of_readiness_stamped:
+          type: boolean
+          title: Proof Of Readiness Stamped
+          default: false
+        cloned_tag_detected:
+          type: boolean
+          title: Cloned Tag Detected
+          default: false
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - accepted
+      - event_id
+      - verified
+      - message
+      title: EdgeEventResponse
+    EdgeSimulationRequest:
+      properties:
+        device_id:
+          type: string
+          title: Device Id
+          default: LIRA-EDGE-01
+        event_type:
+          type: string
+          title: Event Type
+          default: RFID_MISMATCH
+        rfid_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Rfid Token
+          default: WRONG_TAG_99
+        rfid_match:
+          type: boolean
+          title: Rfid Match
+          default: false
+        operator_action:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Operator Action
+        exception_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exception Code
+        eeprom_sector4_dump:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Eeprom Sector4 Dump
+        rolling_ratchet_counter:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rolling Ratchet Counter
+        touch_signature_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Touch Signature Hash
+        mean_z_pressure:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Mean Z Pressure
+        qr_custody_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Qr Custody Token
+        edge_qaoa_bitstring_matched:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Edge Qaoa Bitstring Matched
+      type: object
+      title: EdgeSimulationRequest
+    EdgeTFTStateResponse:
+      properties:
+        device_id:
+          type: string
+          title: Device Id
+        online:
+          type: boolean
+          title: Online
+        hardware_profile:
+          type: string
+          title: Hardware Profile
+          default: ESP32_DEV_V1_ILI9341_DISPLAY_ONLY_RC522_V9
+        checkpoint_label:
+          type: string
+          title: Checkpoint Label
+          default: "Yard Marshal Pre-Gate Display Terminal (RC522 Scan Only \u2014\
+            \ Web-Gated Authorization)"
+        screen_view:
+          type: string
+          title: Screen View
+          default: RESOURCE_LOCK_STATUS
+        display_header:
+          type: string
+          title: Display Header
+          default: LIRA RESOURCELOCK v9
+        display_lines:
+          items:
+            type: string
+          type: array
+          title: Display Lines
+        prompt_tag:
+          type: boolean
+          title: Prompt Tag
+          default: false
+        tag_observed:
+          type: boolean
+          title: Tag Observed
+          default: false
+        awaiting_web_confirmation:
+          type: boolean
+          title: Awaiting Web Confirmation
+          default: false
+        active_work_order_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Active Work Order Id
+        rfid_uid_expected:
+          type: string
+          title: Rfid Uid Expected
+          default: TAG_07
+        assignment_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assignment Id
+        container_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Container Id
+        truck_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Truck Id
+        slot_start:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Slot Start
+        free_time_deadline:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Free Time Deadline
+        approval_state:
+          type: string
+          title: Approval State
+          default: NO_ASSIGNMENT
+        customs_release:
+          type: string
+          title: Customs Release
+          default: CONFIRMED
+        physical_state:
+          type: string
+          title: Physical State
+          default: EXPECTED
+        risk_label:
+          type: string
+          title: Risk Label
+          default: LOW
+        risk_reason:
+          type: string
+          title: Risk Reason
+          default: NORMAL_OPERATIONS
+        qpiai_state:
+          type: string
+          title: Qpiai State
+          default: IDLE
+        last_event_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Event At
+        server_received_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Server Received At
+        decision_capsule_status:
+          type: string
+          title: Decision Capsule Status
+          default: QPIAI_OPT_VALIDATED
+        edge_qaoa_policy_table:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Edge Qaoa Policy Table
+        slot_swap_arbitrage_active:
+          type: boolean
+          title: Slot Swap Arbitrage Active
+          default: true
+        rebate_awarded_c208_inr:
+          type: integer
+          title: Rebate Awarded C208 Inr
+          default: 3000
+      type: object
+      required:
+      - device_id
+      - online
+      title: EdgeTFTStateResponse
+    ExternalEventItem:
+      properties:
+        event_id:
+          type: string
+          title: Event Id
+        type:
+          type: string
+          title: Type
+        trust_state:
+          type: string
+          title: Trust State
+        severity:
+          type: string
+          title: Severity
+        title:
+          type: string
+          title: Title
+        source_label:
+          type: string
+          title: Source Label
+        geography:
+          type: string
+          title: Geography
+        starts_at:
+          type: string
+          title: Starts At
+        ends_at:
+          type: string
+          title: Ends At
+        affected_trucks:
+          items:
+            type: string
+          type: array
+          title: Affected Trucks
+        affected_slots:
+          items:
+            type: string
+          type: array
+          title: Affected Slots
+        is_simulated:
+          type: boolean
+          title: Is Simulated
+          default: false
+        updated_at:
+          type: string
+          title: Updated At
+      type: object
+      required:
+      - event_id
+      - type
+      - trust_state
+      - severity
+      - title
+      - source_label
+      - geography
+      - starts_at
+      - ends_at
+      - affected_trucks
+      - affected_slots
+      - updated_at
+      title: ExternalEventItem
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    HUBOFormulationResponse:
+      properties:
+        incident_id:
+          type: string
+          title: Incident Id
+        degree:
+          type: integer
+          title: Degree
+          default: 3
+        variable_names:
+          items:
+            type: string
+          type: array
+          title: Variable Names
+        pruned_triples_count:
+          type: integer
+          title: Pruned Triples Count
+        linear_vector:
+          additionalProperties:
+            type: number
+          type: object
+          title: Linear Vector
+        quadratic_matrix:
+          items:
+            items:
+              type: number
+            type: array
+          type: array
+          title: Quadratic Matrix
+        cubic_terms:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Cubic Terms
+        slot_swap_ledger:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Slot Swap Ledger
+        polynomial_dict_sample:
+          additionalProperties:
+            type: number
+          type: object
+          title: Polynomial Dict Sample
+        formulation_hash:
+          type: string
+          title: Formulation Hash
+      type: object
+      required:
+      - incident_id
+      - variable_names
+      - pruned_triples_count
+      - linear_vector
+      - quadratic_matrix
+      - cubic_terms
+      - polynomial_dict_sample
+      - formulation_hash
+      title: HUBOFormulationResponse
+    HealthResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          default: ok
+        mode:
+          type: string
+          title: Mode
+          default: LIVE
+        version:
+          type: string
+          title: Version
+          default: v11.0
+        bolna_agent_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bolna Agent Status
+          default: READY
+        bolna_agent_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bolna Agent Id
+        qpiai_opt_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Qpiai Opt Status
+          default: READY
+        qpiai_qcloud_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Qpiai Qcloud Status
+          default: READY
+        weather_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Weather Status
+          default: READY
+        traffic_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Traffic Status
+          default: READY
+        gemini_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Gemini Status
+          default: READY
+        sarvam_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sarvam Status
+          default: READY
+        supabase_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Supabase Status
+          default: READY
+        providers:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Providers
+      type: object
+      title: HealthResponse
+    IncidentDetailResponse:
+      properties:
+        incident_id:
+          type: string
+          title: Incident Id
+        container_id:
+          type: string
+          title: Container Id
+        title:
+          type: string
+          title: Title
+        severity:
+          type: string
+          title: Severity
+        status:
+          type: string
+          title: Status
+        root_blocker_code:
+          type: string
+          title: Root Blocker Code
+        owner_role:
+          type: string
+          title: Owner Role
+        action_deadline:
+          type: string
+          title: Action Deadline
+        projected_avoidable_cost_inr:
+          type: integer
+          title: Projected Avoidable Cost Inr
+        do_nothing_cost_inr:
+          type: integer
+          title: Do Nothing Cost Inr
+        nodes:
+          items:
+            $ref: '#/components/schemas/BlockerNodeSchema'
+          type: array
+          title: Nodes
+        edges:
+          items:
+            $ref: '#/components/schemas/DependencyEdgeSchema'
+          type: array
+          title: Edges
+        container_details:
+          additionalProperties: true
+          type: object
+          title: Container Details
+        created_at:
+          type: string
+          title: Created At
+        updated_at:
+          type: string
+          title: Updated At
+      type: object
+      required:
+      - incident_id
+      - container_id
+      - title
+      - severity
+      - status
+      - root_blocker_code
+      - owner_role
+      - action_deadline
+      - projected_avoidable_cost_inr
+      - do_nothing_cost_inr
+      - nodes
+      - edges
+      - container_details
+      - created_at
+      - updated_at
+      title: IncidentDetailResponse
+    IncidentItem:
+      properties:
+        incident_id:
+          type: string
+          title: Incident Id
+        container_id:
+          type: string
+          title: Container Id
+        title:
+          type: string
+          title: Title
+        severity:
+          type: string
+          title: Severity
+        status:
+          type: string
+          title: Status
+        root_blocker_code:
+          type: string
+          title: Root Blocker Code
+        owner_role:
+          type: string
+          title: Owner Role
+        action_deadline:
+          type: string
+          title: Action Deadline
+        projected_avoidable_cost_inr:
+          type: integer
+          title: Projected Avoidable Cost Inr
+        do_nothing_cost_inr:
+          type: integer
+          title: Do Nothing Cost Inr
+        has_hard_blocker:
+          type: boolean
+          title: Has Hard Blocker
+          default: false
+        evidence_count:
+          type: integer
+          title: Evidence Count
+          default: 0
+        updated_at:
+          type: string
+          title: Updated At
+      type: object
+      required:
+      - incident_id
+      - container_id
+      - title
+      - severity
+      - status
+      - root_blocker_code
+      - owner_role
+      - action_deadline
+      - projected_avoidable_cost_inr
+      - do_nothing_cost_inr
+      - updated_at
+      title: IncidentItem
+    IngestJobResponse:
+      properties:
+        job_id:
+          type: string
+          title: Job Id
+        container_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Container Id
+        status:
+          type: string
+          title: Status
+        raw_source_text:
+          type: string
+          title: Raw Source Text
+        candidate_blockers:
+          items:
+            $ref: '#/components/schemas/CandidateBlocker'
+          type: array
+          title: Candidate Blockers
+        validation_errors:
+          items:
+            type: string
+          type: array
+          title: Validation Errors
+        created_at:
+          type: string
+          title: Created At
+      type: object
+      required:
+      - job_id
+      - status
+      - raw_source_text
+      - candidate_blockers
+      - validation_errors
+      - created_at
+      title: IngestJobResponse
+    InvestigationOptimizeRequest:
+      properties:
+        incident_id:
+          type: string
+          title: Incident Id
+          default: INC-C102
+        device_id:
+          type: string
+          title: Device Id
+          default: LIRA-EDGE-01
+        budget_k:
+          type: integer
+          title: Budget K
+          default: 2
+      type: object
+      title: InvestigationOptimizeRequest
+    PlanAlternative:
+      properties:
+        plan_id:
+          type: string
+          title: Plan Id
+        plan_code:
+          type: string
+          title: Plan Code
+        status:
+          type: string
+          title: Status
+        solver_source:
+          type: string
+          title: Solver Source
+        truck_id:
+          type: string
+          title: Truck Id
+        slot_id:
+          type: string
+          title: Slot Id
+        slot_start:
+          type: string
+          title: Slot Start
+        slot_end:
+          type: string
+          title: Slot End
+        checkpoint_id:
+          type: string
+          title: Checkpoint Id
+        avoidable_cost_inr:
+          type: integer
+          title: Avoidable Cost Inr
+        net_cost_inr:
+          type: integer
+          title: Net Cost Inr
+        feasibility_score:
+          type: number
+          title: Feasibility Score
+        feasible:
+          type: boolean
+          title: Feasible
+        constraint_violations:
+          items:
+            type: string
+          type: array
+          title: Constraint Violations
+        strategy_summary:
+          type: string
+          title: Strategy Summary
+      type: object
+      required:
+      - plan_id
+      - plan_code
+      - status
+      - solver_source
+      - truck_id
+      - slot_id
+      - slot_start
+      - slot_end
+      - checkpoint_id
+      - avoidable_cost_inr
+      - net_cost_inr
+      - feasibility_score
+      - feasible
+      - constraint_violations
+      - strategy_summary
+      title: PlanAlternative
+    RAGQueryRequest:
+      properties:
+        query:
+          type: string
+          title: Query
+        container_id:
+          type: string
+          title: Container Id
+          default: C102
+        tenant_id:
+          type: string
+          title: Tenant Id
+          default: TENANT_JNPA
+      type: object
+      required:
+      - query
+      title: RAGQueryRequest
+    RecalculateRequest:
+      properties:
+        delay_minutes:
+          type: integer
+          title: Delay Minutes
+          default: 0
+        rate_multiplier:
+          type: number
+          title: Rate Multiplier
+          default: 1.0
+      type: object
+      title: RecalculateRequest
+    RecoveryAlternativesResponse:
+      properties:
+        incident_id:
+          type: string
+          title: Incident Id
+        wave:
+          type: integer
+          title: Wave
+        do_nothing_cost_inr:
+          type: integer
+          title: Do Nothing Cost Inr
+        alternatives:
+          items:
+            $ref: '#/components/schemas/PlanAlternative'
+          type: array
+          title: Alternatives
+        evaluated_at:
+          type: string
+          title: Evaluated At
+      type: object
+      required:
+      - incident_id
+      - wave
+      - do_nothing_cost_inr
+      - alternatives
+      - evaluated_at
+      title: RecoveryAlternativesResponse
+    ResourceQuarantineRequest:
+      properties:
+        defect_notes:
+          type: string
+          title: Defect Notes
+        inspector_id:
+          type: string
+          title: Inspector Id
+      type: object
+      required:
+      - defect_notes
+      - inspector_id
+      title: ResourceQuarantineRequest
+    ResourceResponse:
+      properties:
+        resource_id:
+          type: string
+          title: Resource Id
+        resource_type:
+          type: string
+          title: Resource Type
+        name:
+          type: string
+          title: Name
+        tag_ref:
+          type: string
+          title: Tag Ref
+        status:
+          type: string
+          title: Status
+        current_holder_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Current Holder Id
+        current_lease_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Current Lease Id
+        version:
+          type: integer
+          title: Version
+        location:
+          type: string
+          title: Location
+        specs:
+          additionalProperties: true
+          type: object
+          title: Specs
+        updated_at:
+          type: string
+          title: Updated At
+      type: object
+      required:
+      - resource_id
+      - resource_type
+      - name
+      - tag_ref
+      - status
+      - version
+      - location
+      - updated_at
+      title: ResourceResponse
+    ResourceWorkOrderCommitRequest:
+      properties:
+        auth_challenge:
+          type: string
+          title: Auth Challenge
+        operator_user_id:
+          type: string
+          title: Operator User Id
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+      type: object
+      required:
+      - auth_challenge
+      - operator_user_id
+      title: ResourceWorkOrderCommitRequest
+    ResourceWorkOrderCreateRequest:
+      properties:
+        incident_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Incident Id
+        plan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plan Id
+        plan_version:
+          type: integer
+          title: Plan Version
+          default: 1
+        resource_id:
+          type: string
+          title: Resource Id
+        action_type:
+          type: string
+          title: Action Type
+          default: CHECKOUT
+        custodian_user_id:
+          type: string
+          title: Custodian User Id
+          default: USR-MGR
+        target_device_id:
+          type: string
+          title: Target Device Id
+          default: LIRA-EDGE-01
+      type: object
+      required:
+      - resource_id
+      title: ResourceWorkOrderCreateRequest
+    ResourceWorkOrderResponse:
+      properties:
+        work_order_id:
+          type: string
+          title: Work Order Id
+        incident_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Incident Id
+        plan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plan Id
+        plan_version:
+          type: integer
+          title: Plan Version
+          default: 1
+        resource_id:
+          type: string
+          title: Resource Id
+        resource_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resource Name
+        action_type:
+          type: string
+          title: Action Type
+        custodian_user_id:
+          type: string
+          title: Custodian User Id
+        target_device_id:
+          type: string
+          title: Target Device Id
+        auth_challenge:
+          type: string
+          title: Auth Challenge
+        status:
+          type: string
+          title: Status
+        observed_tag_ref:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Observed Tag Ref
+        scan_observed_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scan Observed At
+        committed_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Committed At
+        rejection_reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Rejection Reason
+        created_at:
+          type: string
+          title: Created At
+      type: object
+      required:
+      - work_order_id
+      - resource_id
+      - action_type
+      - custodian_user_id
+      - target_device_id
+      - auth_challenge
+      - status
+      - created_at
+      title: ResourceWorkOrderResponse
+    SimulateExternalEventRequest:
+      properties:
+        type:
+          type: string
+          title: Type
+          default: HEAVY_RAIN
+        trust_state:
+          type: string
+          title: Trust State
+          default: FORECAST_RISK
+        severity:
+          type: string
+          title: Severity
+          default: HIGH
+        title:
+          type: string
+          title: Title
+          default: Heavy rain forecast along Nhava Sheva approach road
+        source_label:
+          type: string
+          title: Source Label
+          default: IMD Radar / Controlled DEMO
+        geography:
+          type: string
+          title: Geography
+          default: Nhava Sheva Corridor
+        duration_hours:
+          type: integer
+          title: Duration Hours
+          default: 4
+        affected_trucks:
+          items:
+            type: string
+          type: array
+          title: Affected Trucks
+          default:
+          - T07
+        affected_slots:
+          items:
+            type: string
+          type: array
+          title: Affected Slots
+          default: []
+      type: object
+      title: SimulateExternalEventRequest
+    SimulateExternalEventResponse:
+      properties:
+        event_id:
+          type: string
+          title: Event Id
+        type:
+          type: string
+          title: Type
+        trust_state:
+          type: string
+          title: Trust State
+        severity:
+          type: string
+          title: Severity
+        impact_summary:
+          type: string
+          title: Impact Summary
+      type: object
+      required:
+      - event_id
+      - type
+      - trust_state
+      - severity
+      - impact_summary
+      title: SimulateExternalEventResponse
+    SolverRunResponse:
+      properties:
+        run_id:
+          type: string
+          title: Run Id
+        incident_id:
+          type: string
+          title: Incident Id
+        formulation_hash:
+          type: string
+          title: Formulation Hash
+        variables_count:
+          type: integer
+          title: Variables Count
+        constraints_count:
+          type: integer
+          title: Constraints Count
+        provider_backend:
+          type: string
+          title: Provider Backend
+        mode:
+          type: string
+          title: Mode
+        shots:
+          type: integer
+          title: Shots
+        execution_time_ms:
+          type: integer
+          title: Execution Time Ms
+        feasible_count:
+          type: integer
+          title: Feasible Count
+        best_energy:
+          type: number
+          title: Best Energy
+        qaoa_distribution:
+          additionalProperties:
+            type: number
+          type: object
+          title: Qaoa Distribution
+        raw_metadata:
+          additionalProperties: true
+          type: object
+          title: Raw Metadata
+        circuit_depth:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Circuit Depth
+          default: 0
+        gate_counts:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Gate Counts
+        subspace_feasibility_ratio:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Subspace Feasibility Ratio
+          default: 1.0
+        problem_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Problem Hash
+        fallback_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fallback Status
+          default: LIVE_QCLOUD
+        sdk_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sdk Version
+          default: 0.7.5
+        degree:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Degree
+          default: 3
+        cubic_terms_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Cubic Terms Count
+          default: 0
+        created_at:
+          type: string
+          title: Created At
+      type: object
+      required:
+      - run_id
+      - incident_id
+      - formulation_hash
+      - variables_count
+      - constraints_count
+      - provider_backend
+      - mode
+      - shots
+      - execution_time_ms
+      - feasible_count
+      - best_energy
+      - qaoa_distribution
+      - raw_metadata
+      - created_at
+      title: SolverRunResponse
+    TriggerSolveRequest:
+      properties:
+        prefer_quantum:
+          type: boolean
+          title: Prefer Quantum
+          default: true
+        wave:
+          type: integer
+          title: Wave
+          default: 1
+      type: object
+      title: TriggerSolveRequest
+    TriggerSolveResponse:
+      properties:
+        run_id:
+          type: string
+          title: Run Id
+        incident_id:
+          type: string
+          title: Incident Id
+        status:
+          type: string
+          title: Status
+        provider_mode:
+          type: string
+          title: Provider Mode
+        solver_source:
+          type: string
+          title: Solver Source
+        alternatives_generated:
+          type: integer
+          title: Alternatives Generated
+        best_avoidable_cost_inr:
+          type: integer
+          title: Best Avoidable Cost Inr
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - run_id
+      - incident_id
+      - status
+      - provider_mode
+      - solver_source
+      - alternatives_generated
+      - best_avoidable_cost_inr
+      - message
+      title: TriggerSolveResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    VerificationTaskCreate:
+      properties:
+        incident_id:
+          type: string
+          title: Incident Id
+        container_id:
+          type: string
+          title: Container Id
+        blocker_code:
+          type: string
+          title: Blocker Code
+        question:
+          type: string
+          title: Question
+        target_role:
+          type: string
+          title: Target Role
+          default: DISPATCHER
+        target_contact:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Target Contact
+        deadline_minutes:
+          type: integer
+          title: Deadline Minutes
+          default: 60
+        assigned_owner:
+          type: string
+          title: Assigned Owner
+          default: DISPATCHER
+      type: object
+      required:
+      - incident_id
+      - container_id
+      - blocker_code
+      - question
+      title: VerificationTaskCreate
+    VerificationTaskResolve:
+      properties:
+        resolved_claim:
+          type: string
+          title: Resolved Claim
+        verified_by_role:
+          type: string
+          title: Verified By Role
+          default: DISPATCHER
+        evidence_tier:
+          type: string
+          title: Evidence Tier
+          default: T4
+        clear_blocker:
+          type: boolean
+          title: Clear Blocker
+          default: true
+      type: object
+      required:
+      - resolved_claim
+      title: VerificationTaskResolve
+    VerifyRequest:
+      properties:
+        action_type:
+          type: string
+          title: Action Type
+          default: REQUEST_BROKER_AFFIDAVIT
+        target_role:
+          type: string
+          title: Target Role
+          default: CUSTOMS_BROKER
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+      type: object
+      title: VerifyRequest
+    VerifyResponse:
+      properties:
+        task_id:
+          type: string
+          title: Task Id
+        incident_id:
+          type: string
+          title: Incident Id
+        status:
+          type: string
+          title: Status
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - task_id
+      - incident_id
+      - status
+      - message
+      title: VerifyResponse
